@@ -1,4 +1,5 @@
 import type { WechatTool } from '../types'
+import { newId } from './uid'
 
 export const exportLogDatabase = 'wechat-toolbox-export-log'
 export const exportLogChanged = 'wechat-toolbox:export-log-changed'
@@ -56,7 +57,7 @@ async function writeExportLog(record: ExportLog) {
 // failures never convert a successful export into a failed export or a retry.
 export function createExportLogger(write: (record: ExportLog) => Promise<unknown>, onError: () => void) {
   return (input: Pick<ExportLog, 'tool' | 'mode'> & Partial<Pick<ExportLog, 'filename' | 'count'>>) => {
-    const record: ExportLog = { id: crypto.randomUUID(), tool: input.tool, mode: input.mode, filename: input.filename || '', count: input.count ?? 1, startedAt: new Date().toISOString(), outcome: 'pending', note: '' }
+    const record: ExportLog = { id: newId(), tool: input.tool, mode: input.mode, filename: input.filename || '', count: input.count ?? 1, startedAt: new Date().toISOString(), outcome: 'pending', note: '' }
     const safelyWrite = (value: ExportLog) => Promise.resolve().then(() => write(value)).catch(() => { try { onError() } catch { /* reporting is best effort */ } })
     let tail = safelyWrite({ ...record })
     let finished = false

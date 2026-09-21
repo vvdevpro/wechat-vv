@@ -18,6 +18,7 @@ import { WechatSceneEditor } from '@/components/WechatSceneEditor';
 import { BatchStudio } from '@/components/BatchStudio';
 import { ExportLogPage } from '@/components/ExportLogPage';
 import { beginExportLog, exportLogError } from '@/lib/export-log';
+import { newId } from '@/lib/uid';
 import { WorkspacePanels } from '@/components/WorkspacePanels';
 import { StudioLink, ToolHome } from '@/components/ToolHome';
 import { workspaceTools } from '@/lib/workspace-tools';
@@ -161,7 +162,7 @@ function App() {
     const timer = window.setTimeout(() => {
       const now = new Date().toISOString();
       const isNewProject = activeProjectId === null;
-      const id = activeProjectId ?? crypto.randomUUID();
+      const id = activeProjectId ?? newId();
       const name = activeProjectName.trim() || projectName(snapshot);
       const project: ChatProject = {
         ...snapshot,
@@ -221,7 +222,7 @@ function App() {
     const snapshot: ChatProjectSnapshot = { importText, users, messages, settings, selfId };
     if (!projectHasContent(snapshot)) return;
     const now = new Date().toISOString();
-    const id = activeProjectId ?? crypto.randomUUID();
+    const id = activeProjectId ?? newId();
     const project: ChatProject = {
       ...snapshot,
       id,

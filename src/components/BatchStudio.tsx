@@ -16,6 +16,7 @@ import { renderBatchChat } from './batch-chat-render'
 import { cardFilename, chatSnapshot, parseBatch, runBatch, zipImages, type BatchJob, type CaptureMode, type ChatSnapshot } from '@/lib/batch'
 import { BATCH_CHAT_EXAMPLE } from '@/lib/batch-prompt'
 import { beginExportLog } from '@/lib/export-log'
+import { newId } from '@/lib/uid'
 import './BatchStudio.css'
 
 export function BatchStudio({ currentChat }: { currentChat: ChatSnapshot }) {
@@ -46,7 +47,7 @@ export function BatchStudio({ currentChat }: { currentChat: ChatSnapshot }) {
     try {
       const contents = parseBatch(text)
       if (jobs.length + contents.length > 50) throw new Error('每批最多 50 组，请先下载并清空。')
-      const added: BatchJob[] = contents.map(content => ({ id: crypto.randomUUID(), content, mode, snapshot: chatSnapshot(content, currentChat.settings, currentChat.users, currentChat.selfId), selected: true, state: 'ready' }))
+      const added: BatchJob[] = contents.map(content => ({ id: newId(), content, mode, snapshot: chatSnapshot(content, currentChat.settings, currentChat.users, currentChat.selfId), selected: true, state: 'ready' }))
       setJobs(current => [...current, ...added]); setActiveId(added[0].id); setConfirmed(false)
       setView('edit'); setEditSection('content')
       setMessage(`已添加 ${added.length} 组聊天到队列，原有 ${jobs.length} 组保持不变。`)

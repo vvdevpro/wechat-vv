@@ -1,4 +1,5 @@
 import type { ChatMessage, ChatUser, PhoneSettings } from '@/types'
+import { newId } from './uid'
 
 const databaseName = 'wechat-dialog-generator'
 const databaseVersion = 3
@@ -162,7 +163,7 @@ export function copyProject(project: ChatProject, now = new Date()) {
   const timestamp = now.toISOString()
   return {
     ...structuredClone(project),
-    id: crypto.randomUUID(),
+    id: newId(),
     name: `${project.name} 副本`,
     createdAt: timestamp,
     updatedAt: timestamp,

@@ -7,6 +7,7 @@ import { DEFAULT_MOMENT as emptyMoment } from '@/lib/demo-defaults'
 import { WechatPhoneChrome } from '@/components/WechatPhoneChrome'
 import { WorkspacePanels } from './WorkspacePanels'
 import { beginExportLog } from '@/lib/export-log'
+import { newId } from '@/lib/uid'
 import { ScenePreviewFrame } from './ScenePreviewFrame'
 import { ColorField } from './ui/color-field'
 import { Input } from './ui/input'
@@ -104,7 +105,7 @@ export function MomentsEditor({ onToast }: MomentsEditorProps) {
   const addComment = useCallback(() => {
     if (!commentAuthor.trim() || !commentContent.trim()) return
     update('comments', [...draft.comments, {
-      id: crypto.randomUUID(),
+      id: newId(),
       author: commentAuthor.trim(),
       content: commentContent.trim(),
     }])
