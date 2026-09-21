@@ -28,6 +28,51 @@ npm test         # 运行单元测试
 
 React 19 + TypeScript + Vite + Tailwind CSS 4，截图使用 html-to-image。
 
+## Docker 部署
+
+仓库已内置 `Dockerfile`（多阶段：Node 构建 → Nginx 托管）、`nginx.conf` 与 `docker-compose.yml`，可直接部署到自己的服务器（Debian / Ubuntu 等）。
+
+### 1. 安装 Docker
+
+```bash
+curl -fsSL https://get.docker.com | sh
+```
+
+### 2. 拉取代码并启动
+
+```bash
+git clone https://github.com/vvdevpro/wechat-vv.git
+cd wechat-vv
+docker compose up -d --build
+```
+
+构建完成后访问 `http://服务器IP`。
+
+### 3. 放行 80 端口
+
+```bash
+ufw allow 80/tcp
+```
+
+云服务器还需在控制台的安全组 / 防火墙规则中放行 **80** 端口。
+
+### 4. 常用运维命令
+
+```bash
+docker compose ps                  # 查看容器状态
+docker compose logs -f             # 查看日志
+docker compose down                # 停止并移除容器
+git pull && docker compose up -d --build   # 更新到最新代码
+```
+
+### 5. 常见问题
+
+**端口 80 被占用**：将 `docker-compose.yml` 中端口改为 `"8080:80"`，改用 `http://服务器IP:8080` 访问。可用 `ss -tlnp | grep ':80'` 排查占用。
+
+**复制到剪贴板不可用**：Clipboard API 仅在安全上下文（HTTPS 或 localhost）下存在。以 `http://服务器IP` 访问时，导出 PNG、长截图与 ZIP 打包均正常，仅"复制"按钮不可用。需要该功能请绑定域名并配置 HTTPS。
+
+**修改端口或路径**：`vite.config.ts` 使用 `base: './'`，资源为相对路径，部署在任意子路径下均可正常运行，无需改配置。
+
 ## 使用须知
 
 本工具生成的均为模拟内容，适用于内容创作、产品原型、教学演示与剧情分镜。请勿用于伪造凭证、冒充他人或任何欺骗行为。本工具与微信官方无关联。

@@ -1,0 +1,8 @@
+services:
+  wechat-vv:
+    build: .
+    image: wechat-vv:latest
+    container_name: wechat-vv
+    restart: unless-stopped
+    ports:
+      - "80:80"
